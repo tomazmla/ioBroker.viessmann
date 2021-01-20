@@ -486,6 +486,7 @@ function setAllObjects(callback) {
 
 //######POLLING##############################################################################################
 function stepPolling() {
+    adapter.log.debug('Starting stepPolling');
     clearTimeout(timerWait);
     step = -1;
     let actualMinWaitTime = 1000000;
@@ -654,6 +655,7 @@ function main() {
         const fail = /ERR/;
         const vctrld = /vctrld>/;
 
+        adapter.log.debug('Client on.data!');
 
         if (ok.test(data)) {
             adapter.log.debug('Send command okay!');
@@ -661,7 +663,7 @@ function main() {
         } else if(fail.test(data) && step !== 'heartbeat') {
             adapter.log.warn('Vctrld send ERROR: ' + data);
             err_count++;
-            if(err_count > 5 && adapter.config.errors){
+            if(err_count > 0 && adapter.config.errors){
                 adapter.setState('info.connection', false, true);
                 adapter.log.warn('Vctrld send too many errors, restart connection!');
                 client.end();
