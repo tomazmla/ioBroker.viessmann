@@ -725,12 +725,14 @@ function main() {
     client.on('timeout', ()=> {
         adapter.setState('info.connection', false, true);
         adapter.log.error('Timeout connection error!');
+        adapter.log.debug('Timeout connection error!');
         adapter.setState('info.timeout_connection', true);
         client.end();
         client.destroy(); // kill client after server's response
         clearTimeout(timerWait);
         if(timerTimeout){clearTimeout(timerTimeout);}
         if(time_reconnect != '' && time_reconnect_type == 'number'){
+            adapter.log.debug('Setting reconnect');
             timerReconnect = setTimeout(main, time_reconnect*60000);
         }else {
             adapter.log.warn('Reconnect time is wrong');
